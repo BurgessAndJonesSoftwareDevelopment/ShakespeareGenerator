@@ -1,0 +1,57 @@
+import random
+def generateMonkey():
+    shakeSpeare = []
+    for i in range(0, 28):
+        a = random.randrange(97, 124)
+        if a == 123:
+            a = 32
+        shakeSpeare.append(chr(a))
+    return shakeSpeare
+
+def generateChar():
+    for i in range(0, 27):
+        a = random.randrange(97, 124)
+        if a == 123:
+            a = 32
+    return chr(a)
+
+
+def score(a):
+    score = 0
+    checkPhrase = 'methinks it is like a weasel'
+    for i in range(0, 28):
+        if a[i] == checkPhrase[i]:
+            score += 1
+    return score
+def main():
+    thousand = 0
+    highest = 0
+    highestPhrase = []
+
+    thousand += 1
+    phrase = generateMonkey()
+    phraseCheck = score(phrase)
+    checkPhrase = 'methinks it is like a weasel'
+    print("".join(phrase))
+    while True:
+        thousand += 1
+        for i in range(0, 28):
+            if phrase[i] == checkPhrase[i]:
+                continue
+            a = generateChar()
+            phrase[i] = a
+            #break
+        phraseCheck = score(phrase)
+        print("".join(phrase))
+        if phraseCheck > highest:
+            highest = phraseCheck
+            highestPhrase = phrase
+            if highest >= 28:
+                print('complete. Took', thousand)
+                print("".join(phrase))
+                return thousand
+        if thousand % 1000 == 0:
+            print(thousand, highest, highestPhrase, phrase)
+            
+main()
+    
