@@ -1,0 +1,58 @@
+from random import choice
+from string import ascii_lowercase, ascii_uppercase, punctuation
+
+
+def main(initial_phrase: str, print_attempts: bool = True) -> str:
+    """Simulate all the monkeys' efforts and return a summary string.
+
+    Keyword arguments:
+        initial_phrase -- string for the monkeys to try and replicate
+        prints_attempts -- True to display each monkey's attempt
+    """
+
+    def score(attempt: list) -> int:
+        """Return the score of the current monkey's efforts."""
+        result = 0
+        for each in range(len(phrase)):
+            if attempt[each] == phrase[each]:
+                result += 1
+        return result
+
+    phrase = list(initial_phrase)
+    if not phrase:
+        return 'Obviously, it takes 0 monkeys to write an empty phrase!'
+
+    letters = ''
+    if set(initial_phrase) & set(ascii_lowercase):  # some of the letters are lowercase, son let monkeys type lowercase
+        letters += ascii_lowercase
+    if set(initial_phrase) & set(ascii_uppercase):  # some of the letters are uppercase, son let monkeys type uppercase
+        letters += ascii_uppercase
+    if set(initial_phrase) & set(punctuation):  # some of the letters are punctuation, son let monkeys type punctuation
+        letters += punctuation
+    letters += ''.join((set(initial_phrase) - set(letters)))  # adds in any other letters  that are in the phrase
+
+    monkey_count = 1
+    current_attempt = []
+    for index in range(len(phrase)):
+        current_attempt.append(choice(letters))  # add on a random letter
+    if print_attempts:
+        print(''.join(current_attempt))
+    current_score = score(current_attempt)
+
+    while current_score != len(phrase):  # keeps running until it's perfect
+        monkey_count += 1  # bring in a new monkey
+        for index in range(len(phrase)):
+            if current_attempt[index] != phrase[index]:
+                current_attempt[index] = choice(letters)  # an incorrect letter is changed to a random one
+        current_score = score(current_attempt)
+        if print_attempts:
+            print(''.join(current_attempt))
+
+    if monkey_count == 1:
+        return "After only 1 try, the incredibly lucky monkey arrived at the phrase '{}'.".format(''.join(phrase))
+    else:
+        return "Finally! After {} tries, the monkeys arrived at the phrase '{}'.".format(monkey_count, ''.join(phrase))
+
+
+if __name__ == '__main__':
+    print(main('Methinks it is like a weasel.'))
